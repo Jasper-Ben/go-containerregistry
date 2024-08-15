@@ -32,7 +32,7 @@ jobs:
           # ./cmd/krane is a separate module, so switch directories.
           cd ./cmd/krane
           ko build -B github.com/google/go-containerregistry/cmd/krane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
-        env:
+        with:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/default/.ko.yaml
           # TODO: not sure if steps.string.outputs.lowercase is correct here, see also below
           KO_DOCKER_REPO: ghcr.io/${{ steps.string.outputs.lowercase }}
@@ -43,7 +43,7 @@ jobs:
           # ./cmd/krane is a separate module, so switch directories.
           cd ${{ github.workspace }}/cmd/krane
           ko build -B github.com/google/go-containerregistry/cmd/krane -t "debug"
-        env:
+        with:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
       - name: Build the tag specific debug images
         run: |
@@ -52,5 +52,5 @@ jobs:
           # ./cmd/krane is a separate module, so switch directories.
           cd ./cmd/krane
           KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/krane/debug ko build --bare github.com/google/go-containerregistry/cmd/krane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
-        env:
+        with:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
