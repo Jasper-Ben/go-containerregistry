@@ -53,11 +53,11 @@ jobs:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
       - name: Build the tag specific debug images
         run: |
-          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/crane/debug  ko build --bare github.com/google/go-containerregistry/cmd/crane  -t latest -t $GITHUB_SHA -t $SOURCE_TAG
-          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/gcrane/debug ko build --bare github.com/google/go-containerregistry/cmd/gcrane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/crane/debug  ko build --bare github.com/${{ steps.string.outputs.lowercase }}/cmd/crane  -t latest -t $GITHUB_SHA -t $SOURCE_TAG
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/gcrane/debug ko build --bare github.com/${{ steps.string.outputs.lowercase }}/cmd/gcrane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
           # ./cmd/krane is a separate module, so switch directories.
           cd ./cmd/krane
-          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/krane/debug ko build --bare github.com/google/go-containerregistry/cmd/krane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/krane/debug ko build --bare github.com/${{ steps.string.outputs.lowercase }}/cmd/krane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
           SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
