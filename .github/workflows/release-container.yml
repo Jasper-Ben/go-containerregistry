@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      - name: string
+      - id: string
         uses: ASzc/change-string-case-action@v6
         with:
           string: ${{ github.repository }}
