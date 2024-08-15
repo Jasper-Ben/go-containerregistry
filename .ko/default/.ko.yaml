@@ -1,6 +1,5 @@
-defaultBaseImage: gcr.io/distroless/base:debug
 builds:
-  - id: debug
+  - id: default
     flags:
       - -trimpath
     ldflags:
