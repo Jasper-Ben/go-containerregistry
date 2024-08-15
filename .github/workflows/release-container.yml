@@ -8,9 +8,11 @@ env:
   KO_DEFAULTPLATFORMS: all
 
 jobs:
-  golang:
+  release-container:
     name: Build the crane container image
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -38,7 +40,6 @@ jobs:
           ko build -B github.com/google/go-containerregistry/cmd/krane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/default/.ko.yaml
-          # TODO: not sure if steps.string.outputs.lowercase is correct here, see also below
           KO_DOCKER_REPO: ghcr.io/${{ steps.string.outputs.lowercase }}
           SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
       - name: Build the crane-ish builder debug images
