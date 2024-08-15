@@ -14,9 +14,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
+      - name: string
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ github.repository }}
       - name: Setup Go
         uses: actions/setup-go@v5
-        with:
+        with: 
           go-version: 1.21
           check-latest: true
       - name: Setup Ko
@@ -30,8 +34,8 @@ jobs:
           ko build -B github.com/google/go-containerregistry/cmd/krane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/default/.ko.yaml
-          # TODO: not sure if github.repository is correct here, see also below
-          KO_DOCKER_REPO: ghcr.io/${{ github.repository }}
+          # TODO: not sure if steps.string.outputs.lowercase is correct here, see also below
+          KO_DOCKER_REPO: ghcr.io/${{ steps.string.outputs.lowercase }}
       - name: Build the crane-ish builder debug images
         run: |
           ko build -B github.com/google/go-containerregistry/cmd/crane  -t "debug"
@@ -43,10 +47,10 @@ jobs:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
       - name: Build the tag specific debug images
         run: |
-          KO_DOCKER_REPO=gcr.io/${{ github.repository }}/crane/debug  ko build --bare github.com/google/go-containerregistry/cmd/crane  -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
-          KO_DOCKER_REPO=gcr.io/${{ github.repository }}/gcrane/debug ko build --bare github.com/google/go-containerregistry/cmd/gcrane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/crane/debug  ko build --bare github.com/google/go-containerregistry/cmd/crane  -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/gcrane/debug ko build --bare github.com/google/go-containerregistry/cmd/gcrane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
           # ./cmd/krane is a separate module, so switch directories.
           cd ./cmd/krane
-          KO_DOCKER_REPO=gcr.io/${{ github.repository }}/krane/debug ko build --bare github.com/google/go-containerregistry/cmd/krane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
+          KO_DOCKER_REPO=gcr.io/${{ steps.string.outputs.lowercase }}/krane/debug ko build --bare github.com/google/go-containerregistry/cmd/krane -t latest -t ${{ env.GITHUB_SHA }} -t ${{ env.GITHUB_REF }}
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
