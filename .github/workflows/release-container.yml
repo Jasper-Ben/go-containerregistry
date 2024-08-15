@@ -9,7 +9,7 @@ env:
 
 jobs:
   release-container:
-    name: Build the crane container image
+    name: Build the crane-ish container images
     runs-on: ubuntu-latest
     permissions:
       packages: write
