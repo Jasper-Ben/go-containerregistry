@@ -4,4 +4,4 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -X=github.com/google/go-containerregistry/cmd/crane/cmd.Version={{.Git.FullCommit}}
+      - -X github.com/google/go-containerregistry/cmd/crane/cmd.Version={{.Git.Tag}}
