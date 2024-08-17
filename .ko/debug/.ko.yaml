@@ -1,8 +1,1 @@
 defaultBaseImage: gcr.io/distroless/base:debug
-builds:
-  - id: debug
-    flags:
-      - -trimpath
-    ldflags:
-      - -X github.com/google/go-containerregistry/cmd/crane/cmd.Version=1.0.0
-      - -X github.com/google/go-containerregistry/pkg/v1/remote/transport.Version={{.Git.Tag}}

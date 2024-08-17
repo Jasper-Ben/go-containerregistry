@@ -39,9 +39,9 @@ jobs:
           cd ./cmd/krane
           ko build -B github.com/google/go-containerregistry/cmd/krane -t latest -t $GITHUB_SHA -t $SOURCE_TAG
         env:
-          KO_CONFIG_PATH: ${{ github.workspace }}/.ko/default/.ko.yaml
           KO_DOCKER_REPO: ghcr.io/${{ steps.lowercase-repository-name.outputs.lowercase }}
           SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
+          GOFLAGS: -ldflags=-X=github.com/google/go-containerregistry/cmd/crane/cmd.Version=${{ steps.tag_name.outputs.SOURCE_TAG }}
       - name: Build the crane-ish builder debug images
         run: |
           ko build -B github.com/google/go-containerregistry/cmd/crane  -t "debug"
@@ -51,6 +51,7 @@ jobs:
           ko build -B github.com/google/go-containerregistry/cmd/krane -t "debug"
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
+          GOFLAGS: -ldflags=-X=github.com/google/go-containerregistry/cmd/crane/cmd.Version=${{ steps.tag_name.outputs.SOURCE_TAG }}
       - name: Build the tag specific debug images
         run: |
           KO_DOCKER_REPO=ghcr.io/${{ steps.lowercase-repository-name.outputs.lowercase }}/crane/debug  ko build --bare github.com/google/go-containerregistry/cmd/crane  -t latest -t $GITHUB_SHA -t $SOURCE_TAG
@@ -61,3 +62,4 @@ jobs:
         env:
           KO_CONFIG_PATH: ${{ github.workspace }}/.ko/debug/.ko.yaml
           SOURCE_TAG: ${{ steps.tag_name.outputs.SOURCE_TAG }}
+          GOFLAGS: -ldflags=-X=github.com/google/go-containerregistry/cmd/crane/cmd.Version=${{ steps.tag_name.outputs.SOURCE_TAG }}
