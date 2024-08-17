@@ -6,7 +6,6 @@ on:
 
 env:
   KO_DEFAULTPLATFORMS: all
-  GOFLAGS: "-ldflags=-X=github.com/google/go-containerregistry/cmd/crane/cmd.Version=${{ vars.GITHUB_SHA }}"
 
 jobs:
   release-container:
